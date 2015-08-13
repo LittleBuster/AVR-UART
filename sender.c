@@ -24,6 +24,11 @@ struct send_data {
 struct recv_data {
     unsigned id;
     unsigned data;
+    
+    union sensor_t {
+      float temp;
+      float hum;
+    } sensor;
 };
 
 struct sender {
@@ -73,6 +78,18 @@ void receiver_recv_data(struct receiver *recv)
                 /*
                  * Led blinking 3 times
                  */
+                Serial.println("\n============================");
+                Serial.print("Id: ");
+                Serial.println(recv->data.id);
+                Serial.print("Data: ");
+                Serial.println(recv->data.data);
+                 Serial.println("\nSensor:");
+                Serial.print("Temp: ");
+                Serial.println(recv->data.sensor.temp);
+                Serial.print("Hum: ");
+                Serial.println(recv->data.sensor.hum);
+                Serial.println("============================");
+                
                 for (i = 0; i < 3; i++) {
                     digitalWrite(9, HIGH);
                     delay(500);
@@ -95,7 +112,7 @@ void setup()
 }
 
 void loop()
-{  
+{
     sender_send_data(&recv.snd, CLIENT_1, GET_INFO);
     delay(3000);
     receiver_recv_data(&recv);

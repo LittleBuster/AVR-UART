@@ -9,7 +9,9 @@
  * 2 of the Licence, or (at your option) any later version.
  */
 
+#include <DHT.h>
 #include <EasyTransfer.h>
+
 
 #define CLIENT_1 100
 
@@ -19,6 +21,11 @@
 struct send_data {
     unsigned id;
     unsigned data;
+    
+    union sensor_t {
+      float temp;
+      float hum;
+    } sensor;
 };
 
 struct recv_data {
@@ -33,6 +40,7 @@ struct sender {
 
 /* Main struct */
 struct receiver {
+    
     EasyTransfer et;
     struct recv_data data;
     struct sender snd;
@@ -57,7 +65,7 @@ void sender_send_data(struct sender *snd, unsigned id, unsigned data)
  */
 void receiver_init(struct receiver *recv)
 {
-    recv->et.begin(details(recv->data), &Serial);
+    recv->et.begin(details(recv->data), &Serial);    
 }
 
 /*
@@ -86,6 +94,19 @@ void receiver_recv_data(struct receiver *recv)
     }
 }
 
+void receiver_get_sensor_data(struct receiver *recv)
+{
+    DHT dht(10, DHT22);
+    dht.begin();
+    float h = dht.readHumidity();
+    float t = dht.readTemperature();
+    
+    if (isnan(t) || isnan(h)) {
+      recv->snd.data.sensor.temp = t;
+      recv->snd.data.sensor.hum = h;
+    }
+}
+
 struct receiver recv;
 
 void setup()
@@ -96,6 +117,7 @@ void setup()
 }
 
 void loop()
-{  
-    receiver_recv_data(&recv);
+{
+    receiver_get_sensor_data(&recv);
+    receiver_recv_data(&recv);    
 }
