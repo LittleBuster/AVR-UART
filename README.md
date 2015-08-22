@@ -2,4 +2,4 @@
 MAX 485 and USART AVR data transfer example
 <br>
 <br>
-<img src="http://s019.radikal.ru/i632/1508/fb/5d98c80673d4.png"/>
+<img src="http://s017.radikal.ru/i430/1508/10/e545cab30ecf.png"/>

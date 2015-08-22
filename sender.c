@@ -7,8 +7,6 @@
  * modify it under the terms of the GNU General Public Licence
  * as published by the Free Software Foundation; either version 3
  * of the Licence, or (at your option) any later version.
- *
- * Original library written by Adafruit Industries. MIT license.
  */
 
 #include <avr/io.h>
@@ -47,7 +45,7 @@ int main()
 	UBRR0L = BAUD_PRESCALE;
 	UCSR0B |= (1 << RXCIE0 );
 
-	/* example of temperature and humidity */
+	/* example of temperature and humidity data */
 	memset(data, 0x00, DATA_SZ);
 	strcpy(data, "22.3$90.0\n");
 

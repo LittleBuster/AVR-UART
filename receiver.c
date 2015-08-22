@@ -7,8 +7,6 @@
  * modify it under the terms of the GNU General Public Licence
  * as published by the Free Software Foundation; either version 3
  * of the Licence, or (at your option) any later version.
- *
- * Original library written by Adafruit Industries. MIT license.
  */
 
 #include <avr/interrupt.h>
@@ -59,7 +57,7 @@ void print_data(struct sensor_data *sdata)
     usart_send("=====================\n");
 }
 
-void parse_data(struct sensor_data *sdata, char *data)
+void parse_data(struct sensor_data *sdata, const char *data)
 {
     uint8_t i = 0;
     char *val = strtok(data, "$");
@@ -68,11 +66,11 @@ void parse_data(struct sensor_data *sdata, char *data)
         val = strtok(NULL, "$");
         switch (i) {
             case 0: {
-                strcpy(sdata->temp, val);
+                strcpy(sdata->hum, val);
                 break;
             }
             case 1: {
-                strcpy(sdata->hum, val);
+                strcpy(sdata->temp, val);
                 break;
             }
         }
